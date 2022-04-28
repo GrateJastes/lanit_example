@@ -1,6 +1,6 @@
 export default {
-    apiKeyGeo: 'a721c36e-52ae-428b-812f-a1fbc2b21da1',
+    apiKeyGeo: 'f9b19be7-f9dc-4862-95a8-11c9f4375178',
     geoApi: 'https://geocode-maps.yandex.ru/1.x/',
-    apiKeyWeather: '31d8cd5bb9c6aec41d284a3c7b901c23',
+    apiKeyWeather: '24b5112cc936ef1b2b4049991aadfa88',
     weatherApi: 'http://api.openweathermap.org/data/2.5/forecast'
 }

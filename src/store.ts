@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import suggesterReducer from './Feautures/suggester/suggesterSlice';
+import { rootReducer } from './Feautures/rootReducer/rootReducer';
 
 export const store = configureStore({
-    reducer: suggesterReducer,
+    reducer: rootReducer,
 });
 
 export type RootState = ReturnType<typeof store.getState>;

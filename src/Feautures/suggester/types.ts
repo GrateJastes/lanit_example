@@ -7,4 +7,5 @@ interface Suggestion {
 
 export interface SystemState {
     suggestions:  Array<Suggestion>;
+    selectedOption: string;
 }

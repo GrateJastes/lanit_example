@@ -1,9 +1,9 @@
 import React from 'react';
-import Select from 'react-select';
+import Select, {SingleValue} from 'react-select';
 import './SearchBar.scss'
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import consts from '../../consts';
-import { clear } from '../../Feautures/suggester/suggesterSlice';
+import {clear, fetchWeather, select} from '../../Feautures/suggester/suggesterSlice';
 import { fetchSuggestions } from '../../Feautures/suggester/suggesterSlice';
 // @ts-ignore
 import ymaps from 'ymaps';
@@ -16,17 +16,24 @@ function SearchBar() {
             // @ts-ignore
             label: suggestion.displayName,
         }));
+    const weatherCast = useAppSelector(state => state.weatherCast)
+    if (weatherCast) {
+        console.log(weatherCast);
+    }
+
     const dispatch = useAppDispatch();
 
     const refreshSuggestions = (searchQuery: string) => {
-        // if (searchQuery.length <= consts.minSearchLength) {
-        //     dispatch(clear())
-        // }
         if (searchQuery.length >= consts.minSearchLength) {
             dispatch(fetchSuggestions(searchQuery));
         }
-    }
-    console.log(suggestionsList);
+    };
+
+    const updateSelectedOption = (newValue: SingleValue<{value: string, label: string}>) => {
+        newValue && dispatch(select(newValue.value));
+        newValue && dispatch(fetchWeather(newValue.value));
+    };
+
     return (
         <Select
             placeholder={'Выберите город'}
@@ -36,6 +43,7 @@ function SearchBar() {
             </span>}
             onInputChange={refreshSuggestions}
             options={suggestionsList}
+            onChange={updateSelectedOption}
         ></Select>
     );
 }
