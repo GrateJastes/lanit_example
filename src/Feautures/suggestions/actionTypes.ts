@@ -1,2 +1,0 @@
-export const REFRESH_SEARCH = 'REFRESH_SEARCH';
-export const DROP_SEARCH = 'DROP_SEARCH';

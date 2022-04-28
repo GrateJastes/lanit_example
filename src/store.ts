@@ -1,8 +1,9 @@
-import {combineReducers, createStore} from 'redux';
-import SuggesterReducer from './Feautures/suggestions/suggesterReducer';
+import { configureStore } from '@reduxjs/toolkit';
+import suggesterReducer from './Feautures/suggester/suggesterSlice';
 
-const initialState = {
-    suggestions: [],
-}
+export const store = configureStore({
+    reducer: suggesterReducer,
+});
 
-
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

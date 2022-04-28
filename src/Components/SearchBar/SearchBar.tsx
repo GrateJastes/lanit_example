@@ -1,36 +1,37 @@
 import React from 'react';
-import Select, {ActionMeta} from 'react-select';
+import Select from 'react-select';
 import './SearchBar.scss'
-
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import consts from '../../consts';
+import {clear} from '../../Feautures/suggester/suggesterSlice';
+import { fetchSuggestions } from '../../Feautures/suggester/suggesterSlice';
 // @ts-ignore
 import ymaps from 'ymaps';
 
-import consts from '../../consts';
+function SearchBar() {
+    const suggestionsList = useAppSelector((state) => state.suggestions);
+    const dispatch = useAppDispatch();
 
-class SearchBar extends React.Component {
-    checkForData = (searchQuery: string) => {
-        if (searchQuery.length >= consts.minSearchLength) {
-            console.log('request sent');
+    const refreshSuggestions = (searchQuery: string) => {
+        if (searchQuery.length <= consts.minSearchLength) {
+            dispatch(clear())
         }
-    };
-
-    componentDidMount() {
-        // @ts-ignore
-        ymaps.load().then((maps) => maps.suggest('хим').then((items) => console.log(items)));
+        if (searchQuery.length >= consts.minSearchLength) {
+            dispatch(fetchSuggestions(searchQuery));
+        }
     }
-
-    render() {
-        return (
-            <Select
-                placeholder={'Выберите город'}
-                className="search-bar"
-                noOptionsMessage={() => <span className="App-header__no-option">
-                Введите минимум 3 символа, или попробуйте изменить запрос
-                </span>}
-                onInputChange={this.checkForData}
-            ></Select>
-        );
-    }
+    console.log(suggestionsList);
+    return (
+        <Select
+            placeholder={'Выберите город'}
+            className="search-bar"
+            noOptionsMessage={() => <span className="App-header__no-option">
+            Введите минимум 3 символа, или попробуйте изменить запрос
+            </span>}
+            onInputChange={refreshSuggestions}
+            options={suggestionsList}
+        ></Select>
+    );
 }
 
 export default SearchBar;
