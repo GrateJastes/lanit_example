@@ -3,20 +3,20 @@ import Select, {SingleValue} from 'react-select';
 import './SearchBar.scss'
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import consts from '../../consts';
-import {clear, fetchWeather, select} from '../../Feautures/suggester/suggesterSlice';
+import {clear, select} from '../../Feautures/suggester/suggesterSlice';
 import { fetchSuggestions } from '../../Feautures/suggester/suggesterSlice';
-// @ts-ignore
-import ymaps from 'ymaps';
+import { fetchWeather } from '../../Feautures/forecaster/forecasterSlice';
+
 
 function SearchBar() {
-    const suggestionsList = useAppSelector((state) => state.suggestions)
+    const suggestionsList = useAppSelector((state) => state.suggester.suggestions)
         .map((suggestion) => ({
             // @ts-ignore
             value: suggestion.value,
             // @ts-ignore
             label: suggestion.displayName,
         }));
-    const weatherCast = useAppSelector(state => state.weatherCast)
+    const weatherCast = useAppSelector(state => state.forecaster.forecast40)
     if (weatherCast) {
         console.log(weatherCast);
     }
