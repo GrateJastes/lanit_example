@@ -1,0 +1,21 @@
+.forecast-card {
+  height: 130px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  text-align: center;
+
+
+  &__time {
+    color: white;
+  }
+
+  &__temp {
+    color: white;
+
+    font-size: 26px;
+  }
+}

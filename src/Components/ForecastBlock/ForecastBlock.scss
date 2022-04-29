@@ -1,0 +1,23 @@
+.forecast-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &__weekday {
+    margin-top: 40px;
+    margin-bottom: 80px;
+
+    font-size: 16px;
+    color: white;
+  }
+
+  &__cards {
+    width: 800px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

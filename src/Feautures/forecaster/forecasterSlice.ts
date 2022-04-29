@@ -4,6 +4,7 @@ import config from '../../config';
 import { WeatherDay, WeatherMoment } from './types';
 import consts from '../../consts';
 import moment from 'moment';
+import { terminateWeatherType, WeatherIcon } from '../../Components/WeatherIcon/WeatherIcon';
 
 interface Weather {
     description: string;
@@ -76,7 +77,6 @@ export const fetchWeather = createAsyncThunk(
             });
     }
 );
-const getWeatherIcon = (forecast: Forecast): string => '';
 
 export const forecasterSlice = createSlice({
     name: 'forecaster',
@@ -95,7 +95,6 @@ export const forecasterSlice = createSlice({
                 (state: ForecasterState, action) => {
                     const forecast40: Array<Forecast> = action.payload.list;
                     let dailyForecasts: Array<WeatherMoment> = [];
-                    let weekDayEng: string = '';
                     let newDayStarted = false;
 
                     state.days = forecast40.reduce((accum, curr, idx, arr) => {
@@ -105,8 +104,8 @@ export const forecasterSlice = createSlice({
                         newDayStarted = true;
 
                         dailyForecasts.push({
+                            weatherType: terminateWeatherType(curr.weather[0].id),
                             time24: moment(curr.dt, 'X').format('HH:mm'),
-                            icon: getWeatherIcon(curr),
                             tempC: Math.round(curr.main.temp),
                         });
 
