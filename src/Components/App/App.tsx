@@ -4,6 +4,7 @@ import SearchBar from '../SearchBar/SearchBar';
 import { Provider } from 'react-redux';
 import { store } from '../../store'
 import { ForecastBlock } from '../ForecastBlock/ForecastBlock';
+import { useAppSelector } from '../../hooks';
 
 function App() {
     return (

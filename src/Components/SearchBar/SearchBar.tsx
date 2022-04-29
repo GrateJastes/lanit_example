@@ -16,11 +16,6 @@ function SearchBar() {
             // @ts-ignore
             label: suggestion.displayName,
         }));
-    const weatherCast = useAppSelector(state => state.forecaster.days)
-    if (weatherCast) {
-        console.log(weatherCast);
-    }
-
     const dispatch = useAppDispatch();
 
     const refreshSuggestions = (searchQuery: string) => {

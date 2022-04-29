@@ -1,5 +1,10 @@
 .forecast-block {
   margin-top: 80px;
+
+
+  &_hidder {
+    display: none;
+  }
 }
 
 .slider-container {
@@ -10,4 +15,3 @@
 .paging-dot {
   fill: white;
 }
-
