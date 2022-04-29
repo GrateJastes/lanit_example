@@ -1,7 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import config from '../../config';
-import { SuggesterState } from '../suggester/suggesterSlice';
+import { WeatherDay, WeatherMoment } from './types';
+import consts from '../../consts';
+import moment from 'moment';
 
 interface Weather {
     description: string;
@@ -41,7 +43,7 @@ export interface Forecast {
 }
 
 export interface ForecasterState {
-    forecast40: Array<Forecast>;
+    days: Array<WeatherDay>;
 }
 
 export const fetchWeather = createAsyncThunk(
@@ -67,21 +69,23 @@ export const fetchWeather = createAsyncThunk(
                             ...coordinates,
                             appid: config.apiKeyWeather,
                             mode: 'json',
+                            units: 'metric',
                         },
                     })
                     .then((response) => response.data)
             });
     }
 );
+const getWeatherIcon = (forecast: Forecast): string => '';
 
 export const forecasterSlice = createSlice({
     name: 'forecaster',
     initialState: {
-        forecast40: [],
+        days: [],
     },
     reducers: {
         clear: state => {
-            state.forecast40 = [];
+            state.days = [];
         },
     },
     extraReducers: builder => {
@@ -89,7 +93,35 @@ export const forecasterSlice = createSlice({
             .addCase(
                 fetchWeather.fulfilled,
                 (state: ForecasterState, action) => {
-                    state.forecast40 = action.payload.list;
+                    const forecast40: Array<Forecast> = action.payload.list;
+                    let dailyForecasts: Array<WeatherMoment> = [];
+                    let weekDayEng: string = '';
+                    let newDayStarted = false;
+
+                    state.days = forecast40.reduce((accum, curr, idx, arr) => {
+                        if (!newDayStarted && moment(curr.dt, 'X').format('HH:mm') !== consts.midnight) {
+                            return [];
+                        }
+                        newDayStarted = true;
+
+                        dailyForecasts.push({
+                            time24: moment(curr.dt, 'X').format('HH:mm'),
+                            icon: getWeatherIcon(curr),
+                            tempC: Math.round(curr.main.temp),
+                        });
+
+                        if (dailyForecasts.length === consts.dailyForecasts) {
+                            accum.push({
+                                // @ts-ignore
+                                weekDay: consts.translateWeekDay[moment(curr.dt, 'X').format('dddd')],
+                                forecasts: dailyForecasts,
+                            });
+
+                            dailyForecasts = [];
+                        }
+
+                        return accum;
+                    }, new Array<WeatherDay>());
                 });
     },
 });

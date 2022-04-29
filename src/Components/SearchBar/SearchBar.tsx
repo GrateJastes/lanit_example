@@ -16,7 +16,7 @@ function SearchBar() {
             // @ts-ignore
             label: suggestion.displayName,
         }));
-    const weatherCast = useAppSelector(state => state.forecaster.forecast40)
+    const weatherCast = useAppSelector(state => state.forecaster.days)
     if (weatherCast) {
         console.log(weatherCast);
     }
