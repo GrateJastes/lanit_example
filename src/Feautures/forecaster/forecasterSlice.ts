@@ -4,7 +4,7 @@ import config from '../../config';
 import { WeatherDay, WeatherMoment } from './types';
 import consts from '../../consts';
 import moment from 'moment';
-import { terminateWeatherType, WeatherIcon } from '../../Components/WeatherIcon/WeatherIcon';
+import { terminateWeatherType} from '../../Components/WeatherIcon/WeatherIcon';
 
 interface Weather {
     description: string;

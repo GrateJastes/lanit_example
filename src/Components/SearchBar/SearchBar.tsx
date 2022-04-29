@@ -1,9 +1,9 @@
 import React from 'react';
-import Select, {SingleValue} from 'react-select';
+import Select, { SingleValue } from 'react-select';
 import './SearchBar.scss'
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import consts from '../../consts';
-import {clear, select} from '../../Feautures/suggester/suggesterSlice';
+import { select } from '../../Feautures/suggester/suggesterSlice';
 import { fetchSuggestions } from '../../Feautures/suggester/suggesterSlice';
 import { fetchWeather } from '../../Feautures/forecaster/forecasterSlice';
 
@@ -29,7 +29,7 @@ function SearchBar() {
         }
     };
 
-    const updateSelectedOption = (newValue: SingleValue<{value: string, label: string}>) => {
+    const updateSelectedOption = (newValue: SingleValue<{ value: string, label: string }>) => {
         newValue && dispatch(select(newValue.value));
         newValue && dispatch(fetchWeather(newValue.value));
     };

@@ -1,0 +1,21 @@
+.forecast-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+
+  &__weekday {
+    margin-bottom: 50px;
+
+    font-size: 16px;
+    color: white;
+  }
+
+  &__cards {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
