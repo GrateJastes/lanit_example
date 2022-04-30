@@ -3,35 +3,37 @@ import './ForecastBlock.scss';
 import Carousel from 'nuka-carousel';
 import { ForecastSlide } from '../ForecastSlide/ForecastSlide';
 import { useAppSelector } from '../../hooks';
+import consts from '../../consts';
+import addParams from '../../Feautures/utils';
 
-export function ForecastBlock() {
-    const placeSelected = useAppSelector((state) => state.suggester.selectedOption !== '');
+
+export interface IForecastBlockProps {
+    dayShift: number | null;
+}
+
+
+export function ForecastBlock(props: IForecastBlockProps) {
     const weatherForecast = useAppSelector((state) => state.forecaster.days);
 
-    if (!placeSelected) {
-        return (<div></div>);
+    const changeParams = (idx: number): void => {
+        const newParams = new URLSearchParams(window.location.search);
+
+        if (!newParams.get('place')) {
+            return;
+        }
+
+        addParams(newParams, [{name: 'dayShift', value: `${idx}`}]);
     }
 
     return (
-        <div className={`forecast-block noselect`}>
+        <div className={`forecast-block noselect ${weatherForecast.length === 0 ? 'forecast-block_hidden' : ''}`}>
             <Carousel
                 autoplay={false}
                 slidesToShow={1}
                 cellAlign={'center'}
-                defaultControlsConfig={({
-                    nextButtonText: '›',
-                    nextButtonStyle: {
-                        fontSize: '60px',
-                        backgroundColor: 'transparent',
-
-                    },
-                    prevButtonText: '‹',
-                    prevButtonStyle: {
-                        fontSize: '60px',
-                        backgroundColor: 'transparent',
-
-                    }
-                })}
+                slideIndex={0}
+                afterSlide={changeParams}
+                defaultControlsConfig={consts.carouselStyleConfig}
             >
                 {weatherForecast.map((weatherDay) => <ForecastSlide weatherDay={weatherDay}/>)}
             </Carousel>

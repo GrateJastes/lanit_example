@@ -29,7 +29,7 @@ export const fetchSuggestions = createAsyncThunk(
 export const suggesterSlice = createSlice({
     name: 'suggester',
     initialState: {
-        suggestions: [],
+        suggestions: new Array<Suggestion>(),
         selectedOption: '',
     },
     reducers: {

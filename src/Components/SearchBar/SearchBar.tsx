@@ -6,14 +6,19 @@ import consts from '../../consts';
 import { select } from '../../Feautures/suggester/suggesterSlice';
 import { fetchSuggestions } from '../../Feautures/suggester/suggesterSlice';
 import { fetchWeather } from '../../Feautures/forecaster/forecasterSlice';
+import addParams from '../../Feautures/utils';
 
 
-function SearchBar() {
+export interface ISearchBarProps {
+    place: string | null;
+    placeLabel: string | null;
+}
+
+
+function SearchBar(props: ISearchBarProps) {
     const suggestionsList = useAppSelector((state) => state.suggester.suggestions)
         .map((suggestion) => ({
-            // @ts-ignore
             value: suggestion.value,
-            // @ts-ignore
             label: suggestion.displayName,
         }));
     const dispatch = useAppDispatch();
@@ -25,8 +30,15 @@ function SearchBar() {
     };
 
     const updateSelectedOption = (newValue: SingleValue<{ value: string, label: string }>) => {
-        newValue && dispatch(select(newValue.value));
-        newValue && dispatch(fetchWeather(newValue.value));
+        const newParams = new URLSearchParams(window.location.search);
+
+        if (!newParams.get('place')) {
+            addParams(newParams, [{name: 'place', value: newValue.value}])
+        }
+
+        const placeName = newValue && newValue.value;
+        placeName && dispatch(select(placeName));
+        placeName && dispatch(fetchWeather(placeName));
     };
 
     return (
