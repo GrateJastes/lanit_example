@@ -31,15 +31,15 @@ export function ForecastBlock(props: IForecastBlockProps) {
                 autoplay={false}
                 slidesToShow={1}
                 cellAlign={'center'}
-                slideIndex={0}
+                slideIndex={props.dayShift || 0}
                 afterSlide={changeParams}
                 defaultControlsConfig={consts.carouselStyleConfig}
             >
-                {weatherForecast.map((weatherDay) => <ForecastSlide weatherDay={weatherDay}/>)}
+                {weatherForecast.map((weatherDay, idx) => <ForecastSlide
+                    key={idx}
+                    weatherDay={weatherDay}/>
+                )}
             </Carousel>
         </div>
     );
 }
-
-
-

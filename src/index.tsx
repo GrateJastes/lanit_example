@@ -4,7 +4,7 @@ import './Assets/Styles/index.css';
 import App, { IAppProps } from './Components/App/App';
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+    document.getElementById('root') as HTMLElement
 );
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -16,7 +16,7 @@ const props: IAppProps = {
 }
 
 root.render(
-  <React.StrictMode>
-    <App {...props}/>
-  </React.StrictMode>
+    <React.StrictMode>
+        <App {...props}/>
+    </React.StrictMode>
 );

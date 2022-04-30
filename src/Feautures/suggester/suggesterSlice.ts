@@ -1,20 +1,12 @@
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 // @ts-ignore
 import ymaps from 'ymaps';
-import config from '../../config';
+import { Suggestion } from './types';
 
-import axios from 'axios';
-
-interface Suggestion {
-    type: string;
-    displayName: string;
-    value: string;
-    hl: Array<Array<number>>;
-}
 
 export interface SuggesterState {
     suggestions: Array<Suggestion>;
-    selectedOption: string;
+    selectedOption: { value: string, label: string };
 }
 
 export const fetchSuggestions = createAsyncThunk(
@@ -30,15 +22,18 @@ export const suggesterSlice = createSlice({
     name: 'suggester',
     initialState: {
         suggestions: new Array<Suggestion>(),
-        selectedOption: '',
+        selectedOption: {value: '', label: ''},
     },
     reducers: {
         clear: state => {
-            state.suggestions = [];
-            state.selectedOption = '';
+            state.suggestions = new Array<Suggestion>();
+            state.selectedOption = {value: '', label: ''};
         },
-        select: (state: SuggesterState, action: PayloadAction<string>) => {
-            state.selectedOption = action.payload;
+        select: (state: SuggesterState, action: PayloadAction<{ value: string, label: string }>) => {
+            state.selectedOption = {
+                value: action.payload.value,
+                label: action.payload.label,
+            };
         },
     },
     extraReducers: builder => {

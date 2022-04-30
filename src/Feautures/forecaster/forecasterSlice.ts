@@ -1,47 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import config from '../../config';
-import { WeatherDay, WeatherMoment } from './types';
+import { Forecast, WeatherDay, WeatherMoment } from './types';
 import consts from '../../consts';
 import moment from 'moment';
-import { terminateWeatherType} from '../../Components/WeatherIcon/WeatherIcon';
+import { terminateWeatherType } from '../../Components/WeatherIcon/WeatherIcon';
 
-interface Weather {
-    description: string;
-    icon: string;
-    id: number;
-    main: string;
-}
-
-export interface Forecast {
-    clouds: {
-        all: string;
-    };
-    dt: number;
-    dt_txt: string;
-    pop: number;
-    visibility: number;
-    sys: {
-        pod: string;
-    };
-    wind: {
-        deg: number;
-        gust: number;
-        speed: number;
-    };
-    main: {
-        feels_like: number;
-        grnd_level: number;
-        humidity: number;
-        pressure: number;
-        sea_level: number;
-        temp: number;
-        temp_kf: number;
-        temp_max: number;
-        temp_min: number;
-    };
-    weather: Array<Weather>;
-}
 
 export interface ForecasterState {
     days: Array<WeatherDay>;
@@ -60,8 +24,8 @@ export const fetchWeather = createAsyncThunk(
             })
             .then((response) => {
                 const coords_str: string = response.data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos;
-                const [ lon, lat ] = coords_str.split(' ');
-                return { lat, lon };
+                const [lon, lat] = coords_str.split(' ');
+                return {lat, lon};
             })
             .then((coordinates) => {
                 return axios
@@ -75,17 +39,17 @@ export const fetchWeather = createAsyncThunk(
                     })
                     .then((response) => response.data)
             });
-    }
+    },
 );
 
 export const forecasterSlice = createSlice({
     name: 'forecaster',
     initialState: {
-        days: [],
+        days: new Array<WeatherDay>(),
     },
     reducers: {
         clear: state => {
-            state.days = [];
+            state.days = new Array<WeatherDay>();
         },
     },
     extraReducers: builder => {
@@ -94,12 +58,12 @@ export const forecasterSlice = createSlice({
                 fetchWeather.fulfilled,
                 (state: ForecasterState, action) => {
                     const forecast40: Array<Forecast> = action.payload.list;
-                    let dailyForecasts: Array<WeatherMoment> = [];
+                    let dailyForecasts = new Array<WeatherMoment>();
                     let newDayStarted = false;
 
-                    state.days = forecast40.reduce((accum, curr, idx, arr) => {
+                    state.days = forecast40.reduce((days, curr, idx, arr) => {
                         if (!newDayStarted && moment(curr.dt, 'X').format('HH:mm') !== consts.midnight) {
-                            return [];
+                            return new Array<WeatherDay>();
                         }
                         newDayStarted = true;
 
@@ -110,20 +74,19 @@ export const forecasterSlice = createSlice({
                         });
 
                         if (dailyForecasts.length === consts.dailyForecasts) {
-                            accum.push({
-                                // @ts-ignore
+                            days.push({
                                 weekDay: consts.translateWeekDay[moment(curr.dt, 'X').format('dddd')],
                                 forecasts: dailyForecasts,
                             });
 
-                            dailyForecasts = [];
+                            dailyForecasts = new Array<WeatherMoment>();
                         }
 
-                        return accum;
+                        return days;
                     }, new Array<WeatherDay>());
                 });
     },
 });
 
-export const { clear } = forecasterSlice.actions;
+export const {clear} = forecasterSlice.actions;
 export default forecasterSlice.reducer;

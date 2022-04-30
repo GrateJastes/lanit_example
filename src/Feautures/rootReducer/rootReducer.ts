@@ -1,4 +1,4 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 import suggesterReducer from '../suggester/suggesterSlice';
 import forecasterReducer from '../forecaster/forecasterSlice';
 
