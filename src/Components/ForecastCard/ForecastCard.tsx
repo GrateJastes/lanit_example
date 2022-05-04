@@ -1,5 +1,5 @@
 import React from 'react';
-import { WeatherMoment } from '../../Feautures/forecaster/types';
+import { WeatherMoment } from '../../Features/Forecaster/types';
 import { WeatherIcon } from '../WeatherIcon/WeatherIcon';
 import './ForecastCard.scss';
 

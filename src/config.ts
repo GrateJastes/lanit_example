@@ -8,7 +8,15 @@ const translateWeekDay: { [key: string]: string; } = {
     Sunday: 'Воскресенье',
 };
 
-const consts = {
+const config =  {
+    secrets: {
+        apiKeyWeather: '24b5112cc936ef1b2b4049991aadfa88',
+        apiKeyGeo: '0459582a-7b73-41da-8dd1-f714c753635e',
+    },
+
+    geoApi: 'https://geocode-maps.yandex.ru/1.x/',
+    weatherApi: 'http://api.openweathermap.org/data/2.5/forecast',
+
     translateWeekDay,
     minSearchLength: 3,
     dailyForecasts: 8,
@@ -29,6 +37,6 @@ const consts = {
 
         },
     },
-};
+}
 
-export default consts;
+export default config;

@@ -2,19 +2,14 @@ import React from 'react';
 import Select, { SingleValue } from 'react-select';
 import './SearchBar.scss'
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import consts from '../../consts';
-import { fetchSuggestions, select } from '../../Feautures/suggester/suggesterSlice';
-import { fetchWeather } from '../../Feautures/forecaster/forecasterSlice';
-import addParams from '../../Feautures/utils';
+import { fetchSuggestions, select } from '../../Features/Suggester/SuggesterSlice';
+import { fetchWeather } from '../../Features/Forecaster/ForecasterSlice';
+import cfg from '../../config';
+import { useSearchParams } from 'react-router-dom';
+import addParams from '../../Features/utils';
 
 
-export interface ISearchBarProps {
-    place: string | null;
-    placeLabel: string | null;
-}
-
-
-function SearchBar(props: ISearchBarProps) {
+function SearchBar() {
     const suggestionsList = useAppSelector((state) => state.suggester.suggestions)
         .map((suggestion) => ({
             value: suggestion.value,
@@ -24,10 +19,14 @@ function SearchBar(props: ISearchBarProps) {
     const dispatch = useAppDispatch();
 
     const refreshSuggestions = (searchQuery: string) => {
-        if (searchQuery.length >= consts.minSearchLength) {
+        if (searchQuery.length >= cfg.minSearchLength) {
             dispatch(fetchSuggestions(searchQuery));
         }
     };
+
+    const [searchParams] = useSearchParams();
+    const place = searchParams.get('place');
+    const placeLabel = searchParams.get('placeLabel');
 
     const updateSelectedOption = (newValue: SingleValue<{ value: string, label: string }>) => {
         if (!newValue) {
@@ -35,9 +34,8 @@ function SearchBar(props: ISearchBarProps) {
         }
 
         const placeName = newValue.value;
-        const newParams = new URLSearchParams(window.location.search);
-        if (!newParams.get('place') || newParams.get('place') !== placeName) {
-            addParams(newParams, [
+        if (!place || place !== placeName) {
+            addParams(searchParams, [
                 {name: 'place', value: placeName},
                 {name: 'placeLabel', value: placeName},
             ]);
@@ -47,8 +45,8 @@ function SearchBar(props: ISearchBarProps) {
         dispatch(fetchWeather(placeName));
     };
 
-    if (props.place && props.placeLabel && selectedOption.value === '') {
-        updateSelectedOption({value: props.place, label: props.placeLabel});
+    if (place && placeLabel && selectedOption.value === '') {
+        updateSelectedOption({value: place, label: placeLabel});
     }
 
     return (

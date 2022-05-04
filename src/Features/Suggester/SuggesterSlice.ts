@@ -46,5 +46,5 @@ export const suggesterSlice = createSlice({
     },
 });
 
-export const {clear, select} = suggesterSlice.actions;
+export const { select } = suggesterSlice.actions;
 export default suggesterSlice.reducer;

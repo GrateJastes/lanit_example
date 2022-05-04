@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import suggesterReducer from '../suggester/suggesterSlice';
-import forecasterReducer from '../forecaster/forecasterSlice';
+import suggesterReducer from '../Suggester/SuggesterSlice';
+import forecasterReducer from '../Forecaster/ForecasterSlice';
 
 export const rootReducer = combineReducers({
     suggester: suggesterReducer,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { WeatherDay } from '../../Feautures/forecaster/types';
+import { WeatherDay } from '../../Features/Forecaster/types';
 import { ForecastCard } from '../ForecastCard/ForecastCard';
 import './ForecastSlide.scss';
 

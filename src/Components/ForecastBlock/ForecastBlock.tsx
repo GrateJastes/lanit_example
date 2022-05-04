@@ -3,26 +3,26 @@ import './ForecastBlock.scss';
 import Carousel from 'nuka-carousel';
 import { ForecastSlide } from '../ForecastSlide/ForecastSlide';
 import { useAppSelector } from '../../hooks';
-import consts from '../../consts';
-import addParams from '../../Feautures/utils';
+import cfg from '../../config';
+import { useSearchParams } from 'react-router-dom';
+import addParams from '../../Features/utils';
 
 
-export interface IForecastBlockProps {
-    dayShift: number | null;
-}
-
-
-export function ForecastBlock(props: IForecastBlockProps) {
+export function ForecastBlock() {
     const weatherForecast = useAppSelector((state) => state.forecaster.days);
+    const [searchParams] = useSearchParams();
+    const place = searchParams.get('place');
+    const dayShift = searchParams.get('dayShift');
+
 
     const changeParams = (idx: number): void => {
-        const newParams = new URLSearchParams(window.location.search);
-
-        if (!newParams.get('place')) {
+        if (!place) {
             return;
         }
 
-        addParams(newParams, [{name: 'dayShift', value: `${idx}`}]);
+        addParams(searchParams, [
+            {name: 'dayShift', value: `${idx}`},
+        ]);
     }
 
     return (
@@ -31,9 +31,9 @@ export function ForecastBlock(props: IForecastBlockProps) {
                 autoplay={false}
                 slidesToShow={1}
                 cellAlign={'center'}
-                slideIndex={props.dayShift || 0}
+                slideIndex={parseInt(dayShift || '') || 0}
                 afterSlide={changeParams}
-                defaultControlsConfig={consts.carouselStyleConfig}
+                defaultControlsConfig={cfg.carouselStyleConfig}
             >
                 {weatherForecast.map((weatherDay, idx) => <ForecastSlide
                     key={idx}

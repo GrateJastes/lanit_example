@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import config from '../../config';
+import cfg from '../../config';
 import { Forecast, WeatherDay, WeatherMoment } from './types';
-import consts from '../../consts';
 import moment from 'moment';
 import { terminateWeatherType } from '../../Components/WeatherIcon/WeatherIcon';
 
@@ -15,9 +14,9 @@ export const fetchWeather = createAsyncThunk(
     'fetch_weather_info',
     async (placeName: string, thunkAPI) => {
         return await axios
-            .get(config.geoApi, {
+            .get(cfg.geoApi, {
                 params: {
-                    apikey: config.apiKeyGeo,
+                    apikey: cfg.secrets.apiKeyGeo,
                     geocode: placeName,
                     format: 'json',
                 },
@@ -29,10 +28,10 @@ export const fetchWeather = createAsyncThunk(
             })
             .then((coordinates) => {
                 return axios
-                    .get(config.weatherApi, {
+                    .get(cfg.weatherApi, {
                         params: {
                             ...coordinates,
-                            appid: config.apiKeyWeather,
+                            appid: cfg.secrets.apiKeyWeather,
                             mode: 'json',
                             units: 'metric',
                         },
@@ -61,8 +60,8 @@ export const forecasterSlice = createSlice({
                     let dailyForecasts = new Array<WeatherMoment>();
                     let newDayStarted = false;
 
-                    state.days = forecast40.reduce((days, curr, idx, arr) => {
-                        if (!newDayStarted && moment(curr.dt, 'X').format('HH:mm') !== consts.midnight) {
+                    state.days = forecast40.reduce((days, curr) => {
+                        if (!newDayStarted && moment(curr.dt, 'X').format('HH:mm') !== cfg.midnight) {
                             return new Array<WeatherDay>();
                         }
                         newDayStarted = true;
@@ -73,9 +72,9 @@ export const forecasterSlice = createSlice({
                             tempC: Math.round(curr.main.temp),
                         });
 
-                        if (dailyForecasts.length === consts.dailyForecasts) {
+                        if (dailyForecasts.length === cfg.dailyForecasts) {
                             days.push({
-                                weekDay: consts.translateWeekDay[moment(curr.dt, 'X').format('dddd')],
+                                weekDay: cfg.translateWeekDay[moment(curr.dt, 'X').format('dddd')],
                                 forecasts: dailyForecasts,
                             });
 
@@ -88,5 +87,4 @@ export const forecasterSlice = createSlice({
     },
 });
 
-export const {clear} = forecasterSlice.actions;
 export default forecasterSlice.reducer;
