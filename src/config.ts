@@ -10,12 +10,12 @@ const translateWeekDay: { [key: string]: string; } = {
 
 const config =  {
     secrets: {
-        apiKeyWeather: '24b5112cc936ef1b2b4049991aadfa88',
+        apiKeyWeather: '5ec185b7556ad80b7e0e14cc5b510b71',
         apiKeyGeo: '0459582a-7b73-41da-8dd1-f714c753635e',
     },
 
     geoApi: 'https://geocode-maps.yandex.ru/1.x/',
-    weatherApi: 'http://api.openweathermap.org/data/2.5/forecast',
+    weatherApi: 'http://api.openweathermap.org/data/2.5/forecast/',
 
     translateWeekDay,
     minSearchLength: 3,
@@ -37,6 +37,8 @@ const config =  {
 
         },
     },
+
+    noOptionText: 'Введите минимум 3 символа, или попробуйте изменить запрос',
 }
 
 export default config;

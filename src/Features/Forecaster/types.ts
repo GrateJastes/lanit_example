@@ -7,7 +7,7 @@ interface Weather {
     main: string;
 }
 
-export interface Forecast {
+export interface IOpenWeatherForecast {
     clouds: {
         all: string;
     };

@@ -2,31 +2,31 @@ import React from 'react';
 import './ForecastBlock.scss';
 import Carousel from 'nuka-carousel';
 import { ForecastSlide } from '../ForecastSlide/ForecastSlide';
-import { useAppSelector } from '../../hooks';
 import cfg from '../../config';
 import { useSearchParams } from 'react-router-dom';
 import addParams from '../../Features/utils';
+import { WeatherDay } from '../../Features/Forecaster/types';
+
+export interface IForecastBlockProps {
+    weatherForecast: Array<WeatherDay>;
+}
 
 
-export function ForecastBlock() {
-    const weatherForecast = useAppSelector((state) => state.forecaster.days);
+export function ForecastBlock(props: IForecastBlockProps) {
     const [searchParams] = useSearchParams();
-    const place = searchParams.get('place');
     const dayShift = searchParams.get('dayShift');
 
-
     const changeParams = (idx: number): void => {
-        if (!place) {
+        if (document.querySelector('.forecast-block_hidden')) {
             return;
         }
-
         addParams(searchParams, [
             {name: 'dayShift', value: `${idx}`},
         ]);
     }
 
     return (
-        <div className={`forecast-block noselect ${weatherForecast.length === 0 ? 'forecast-block_hidden' : ''}`}>
+        <div className={`forecast-block noselect ${props.weatherForecast.length === 0 ? 'forecast-block_hidden' : ''}`}>
             <Carousel
                 autoplay={false}
                 slidesToShow={1}
@@ -35,7 +35,7 @@ export function ForecastBlock() {
                 afterSlide={changeParams}
                 defaultControlsConfig={cfg.carouselStyleConfig}
             >
-                {weatherForecast.map((weatherDay, idx) => <ForecastSlide
+                {props.weatherForecast.map((weatherDay, idx) => <ForecastSlide
                     key={idx}
                     weatherDay={weatherDay}/>
                 )}
