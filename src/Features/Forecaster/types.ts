@@ -1,6 +1,6 @@
 import { WeatherType } from '../../Components/WeatherIcon/WeatherIcon';
 
-interface Weather {
+interface IWeather {
     description: string;
     icon: string;
     id: number;
@@ -34,16 +34,16 @@ export interface IOpenWeatherForecast {
         temp_max: number;
         temp_min: number;
     };
-    weather: Array<Weather>;
+    weather: Array<IWeather>;
 }
 
-export interface WeatherMoment {
+export interface IWeatherMoment {
     weatherType: WeatherType;
     time24: string;
     tempC: number;
 }
 
-export interface WeatherDay {
+export interface IWeatherDay {
     weekDay: string;
-    forecasts: Array<WeatherMoment>;
+    forecasts: Array<IWeatherMoment>;
 }

@@ -1,10 +1,10 @@
 import React from 'react';
-import { WeatherMoment } from '../../Features/Forecaster/types';
+import { IWeatherMoment } from '../../Features/Forecaster/types';
 import { WeatherIcon } from '../WeatherIcon/WeatherIcon';
 import './ForecastCard.scss';
 
 export type IForecastCardProps = {
-    weatherMoment: WeatherMoment;
+    weatherMoment: IWeatherMoment;
 }
 
 export function ForecastCard(props: IForecastCardProps) {

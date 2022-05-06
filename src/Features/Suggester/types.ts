@@ -1,6 +1,4 @@
-export interface Suggestion {
-    type: string;
-    displayName: string;
+export interface ISelectOption {
     value: string;
-    hl: Array<Array<number>>;
+    label: string;
 }

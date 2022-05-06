@@ -1,10 +1,10 @@
 import React from 'react';
-import { WeatherDay } from '../../Features/Forecaster/types';
+import { IWeatherDay } from '../../Features/Forecaster/types';
 import { ForecastCard } from '../ForecastCard/ForecastCard';
 import './ForecastSlide.scss';
 
 export interface IForecastSlideProps {
-    weatherDay: WeatherDay;
+    weatherDay: IWeatherDay;
 }
 
 export function ForecastSlide(props: IForecastSlideProps) {

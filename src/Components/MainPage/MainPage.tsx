@@ -1,12 +1,11 @@
 import {
-    ICoordinates,
     useLazyGetCoordsByPlaceNameQuery,
     useLazyGetWeatherByCoordsQuery
 } from '../../Features/Forecaster/ForecasterAPI';
 import SearchBar from '../SearchBar/SearchBar';
 import { ForecastBlock } from '../ForecastBlock/ForecastBlock';
 import React, { useEffect, useState } from 'react';
-import { ISelectOption } from '../../Features/Suggester/SuggesterSlice';
+import { ISelectOption } from '../../Features/Suggester/types';
 
 
 function MainPage() {

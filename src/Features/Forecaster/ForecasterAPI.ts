@@ -1,11 +1,11 @@
-import { BaseQueryFn, createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import cfg from '../../config';
-import { IOpenWeatherForecast, WeatherDay, WeatherMoment } from './types';
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import { IOpenWeatherForecast, IWeatherDay, IWeatherMoment } from './types';
 import moment from 'moment';
 import { terminateWeatherType } from '../../Components/WeatherIcon/WeatherIcon';
+import { axiosBaseQuery } from '../utils';
 
-export interface ICoordinates {
+interface ICoordinates {
     lat: string;
     lon: string;
 }
@@ -29,14 +29,8 @@ interface IGeoDataResponse {
 }
 
 
-const axiosBaseQuery = (baseUrl=''): BaseQueryFn<{
-    url: string,
-    params?: AxiosRequestConfig['params'],
-}> => async ({ url, params }) => await axios.get(url, { params }).then((res) => res);
-
-
 export const forecasterAPI = createApi({
-    reducerPath: 'suggesterApi',
+    reducerPath: 'forecasterAPI',
     baseQuery: axiosBaseQuery(),
     endpoints: (builder) => ({
         getCoordsByPlaceName: builder.query<ICoordinates, string>({
@@ -60,7 +54,7 @@ export const forecasterAPI = createApi({
                 return {lon, lat};
             },
         }),
-        getWeatherByCoords: builder.query<Array<WeatherDay>, ICoordinates>({
+        getWeatherByCoords: builder.query<Array<IWeatherDay>, ICoordinates>({
             query: (coords) => ({
                 url: cfg.weatherApi,
                 params: {
@@ -70,14 +64,14 @@ export const forecasterAPI = createApi({
                     units: 'metric',
                 },
             }),
-            transformResponse: (res: IOpenWeatherResponse): Array<WeatherDay> => {
+            transformResponse: (res: IOpenWeatherResponse): Array<IWeatherDay> => {
                 const forecast40: Array<IOpenWeatherForecast> = res.list;
-                let dailyForecasts = new Array<WeatherMoment>();
+                let dailyForecasts = new Array<IWeatherMoment>();
                 let newDayStarted = false;
 
                 return forecast40.reduce((days, curr) => {
                     if (!newDayStarted && moment(curr.dt, 'X').format('HH:mm') !== cfg.midnight) {
-                        return new Array<WeatherDay>();
+                        return new Array<IWeatherDay>();
                     }
                     newDayStarted = true;
 
@@ -93,11 +87,11 @@ export const forecasterAPI = createApi({
                             forecasts: dailyForecasts,
                         });
 
-                        dailyForecasts = new Array<WeatherMoment>();
+                        dailyForecasts = new Array<IWeatherMoment>();
                     }
 
                     return days;
-                }, new Array<WeatherDay>());
+                }, new Array<IWeatherDay>());
             },
         }),
     }),

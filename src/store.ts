@@ -1,18 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { forecasterAPI } from './Features/Forecaster/ForecasterAPI';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import suggesterReducer from './Features/Suggester/SuggesterSlice';
+import { suggesterAPI } from './Features/Suggester/SuggesterAPI';
 
 export const store = configureStore({
     reducer: {
-        suggester: suggesterReducer,
+        [suggesterAPI.reducerPath]: suggesterAPI.reducer,
         [forecasterAPI.reducerPath]: forecasterAPI.reducer,
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(forecasterAPI.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+        .concat(forecasterAPI.middleware)
+        .concat(suggesterAPI.middleware),
 });
 
 setupListeners(store.dispatch);
-
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
-export default store;
